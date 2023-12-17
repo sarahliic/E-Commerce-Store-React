@@ -1,0 +1,43 @@
+ const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [message, setMessage] = useState("");
+  //handleChange
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const nav = useNavigate();
+
+  //handleSubmit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      form.username === "" ||
+      form.email === "" ||
+      form.password === "" ||
+      form.confirmPassword === ""
+    ) {
+      setMessage("is empty");
+    } else {
+      // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      if (!form.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+        setMessage("invalid Email");
+      }
+      // /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+      else if (!form.password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/)) {
+        setMessage("invalid Pssword");
+      } else if (form.confirmPassword !== form.password) {
+        setMessage("not match password");
+      } else {
+        localStorage.setItem(form.username, JSON.stringify(form));
+        nav("/Login");
+      }
+    }
+  };
